@@ -1,4 +1,4 @@
-export default class TowerOfHanoi {
+export default class GameLogic {
   constructor(numDisks) {
     this.numDisks = numDisks;
     this.towers = [[], [], []];
