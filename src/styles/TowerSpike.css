@@ -1,0 +1,10 @@
+.tower-spike {
+  width: 10px; /* Fixed width for the spike */
+  height: 90%; /* Extend the spike to 90% of the tower height */
+  background-color: #555; /* Dark gray color */
+  position: absolute; /* Position it within the tower container */
+  bottom: 0; /* Anchor it to the bottom of the tower */
+  left: 50%; /* Center it horizontally */
+  transform: translateX(-50%); /* Adjust centering */
+  z-index: 0; /* Ensure it appears behind the disks */
+}

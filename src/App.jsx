@@ -1,28 +1,14 @@
-import React, { useState } from 'react';
-import TowerOfHanoi from './logic/TowerOfHanoi';
+import React from 'react';
+import './styles/App.css'
+import GameBoard from './components/GameBoard';
 
-const App = () => {
-  // eslint-disable-next-line no-unused-vars
-  const [game, setGame] = useState(new TowerOfHanoi(3));
-  // eslint-disable-next-line no-unused-vars
-  const [towers, setTowers] = useState(game.towers);
-
-  // eslint-disable-next-line no-unused-vars
-  const handleMove = (fromTower, toTower) => {
-    try {
-      game.moveDisk(fromTower, toTower);
-      setTowers([...game.towers]);
-    } catch (error) {
-      alert(error.message);
-    }
-  };
-
+function App() {
   return (
-    <div>
-      <h1>Tower of Hanoi</h1>
-      {/* Render Towers and Controls */}
+    <div className="app-container">
+      <h1 className="app-title">Tower of Hanoi</h1>
+      <GameBoard />
     </div>
   );
-};
+}
 
 export default App;
