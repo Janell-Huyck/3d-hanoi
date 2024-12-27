@@ -1,0 +1,7 @@
+.base {
+  width: 100%; /* Extend across the entire game board */
+  height: 1rem; /* Fixed height for the base */
+  background-color: #333; /* Dark gray to match the spikes */
+  position: absolute;
+  bottom: 0; /* Anchored to the bottom of the game board */
+}

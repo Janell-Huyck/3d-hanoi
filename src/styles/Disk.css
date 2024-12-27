@@ -1,0 +1,23 @@
+.disk {
+  height: 1rem;
+  margin: 0.2rem 0;
+  border-radius: 5px;
+  text-align: center;
+  z-index: 1;
+}
+
+.red { background-color: red; }
+.orange { background-color: orange; }
+.yellow { background-color: yellow; }
+.green { background-color: green; }
+.blue { background-color: blue; }
+.indigo { background-color: indigo; }
+.violet { background-color: violet; }
+
+.size-1 { width: 10%; }
+.size-2 { width: 20%; }
+.size-3 { width: 30%; }
+.size-4 { width: 40%; }
+.size-5 { width: 50%; }
+.size-6 { width: 70%; }
+.size-7 { width: 90%; }
