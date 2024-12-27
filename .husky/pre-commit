@@ -1,0 +1,20 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "Running linting..."
+npm run lint || exit 1
+
+echo "Running tests..."
+if ! npm test; then
+  echo "Some tests failed."
+  read -p "Do you want to proceed with the commit anyway? (y/N): " confirm
+  case "$confirm" in
+    [yY][eE][sS]|[yY])
+      echo "Proceeding with the commit despite test failures."
+      ;;
+    *)
+      echo "Commit aborted due to failing tests."
+      exit 1
+      ;;
+  esac
+fi
