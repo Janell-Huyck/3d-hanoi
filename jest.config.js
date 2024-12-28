@@ -2,7 +2,7 @@ export default {
   transform: {
     '^.+\\.(js|jsx)$': '@swc/jest', // Use SWC to transform JavaScript and JSX
   },
-  testEnvironment: 'jsdom', 
+  testEnvironment: 'jsdom',
   moduleFileExtensions: ['js', 'jsx', 'json', 'css'], // Recognize .js and .jsx files
   roots: ['<rootDir>/src'], // Look for tests in the 'src' directory
   testMatch: ['**/?(*.)+(test).[jt]s?(x)'], // Match test files with .test.js/.test.jsx
@@ -10,4 +10,7 @@ export default {
   moduleNameMapper: {
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy', // Mock CSS files
   },
+  transformIgnorePatterns: [
+    '/node_modules/(?!(react-dnd|dnd-core|@react-dnd|react-dnd-html5-backend))',
+  ], // Ensure these dependencies are transpiled
 };

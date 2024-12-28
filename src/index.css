@@ -1,18 +1,15 @@
-html, body {
+html,
+body,
+#root {
   height: 100%; /* Ensure the body fills the viewport height */
+  width: 100%;
   min-height: 300px; /* Set a minimum height for the page */
   margin: 0;
   overflow-y: auto; /* Enable vertical scrolling for small screens */
-  box-sizing: border-box; /* Include padding and borders in height/width calculations */
 }
 
-.app-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  min-height: 180px; /* Ensure the main container respects the minimum height */
-  height: 100%; /* Take full height when possible */
-  width: 100%;
-  border: 1rem;
+*,
+*::before,
+*::after {
+  box-sizing: border-box; /* Apply border-box universally */
 }

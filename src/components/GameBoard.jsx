@@ -1,35 +1,40 @@
 import React from 'react';
-import '../styles/GameBoard.css';
+import PropTypes from 'prop-types';
 import Tower from './Tower';
 import Base from './Base'
+import '../styles/GameBoard.css';
 
-const GameBoard = () => {
-  const initialConfiguration = [
-    [7, 6, 5, 4, 3, 2, 1], // Disks on Tower 1
-    [],        // Tower 2 is empty
-    []         // Tower 3 is empty
-  ];
-
-  const maxDiskSize = initialConfiguration.reduce(
-    (max, disks) => Math.max(max, ...disks),
-    0
-  );
-
+const GameBoard = ({
+  towers,
+  selectedTower,
+  selectedDisk,
+  onTowerClick,
+  onDiskDrop,
+}) => {
   return (
     <div className="game-board">
-      <div className="tower-container">
-        {initialConfiguration.map((towerDisks, index) => (
-          <Tower
-            key={index}
-            disks={towerDisks}
-            towerIndex={index + 1}
-            maxDiskSize={maxDiskSize}
-          />
-        ))}
-      </div>
+      {towers.map((tower, towerIndex) => (
+        <Tower
+          key={towerIndex}
+          towerIndex={towerIndex}
+          disks={tower}
+          isSelected={selectedTower === towerIndex}
+          selectedDisk={selectedDisk}
+          onTowerClick={onTowerClick}
+          onDiskDrop={onDiskDrop}
+        />
+      ))}
       <Base />
     </div>
   );
+};
+
+GameBoard.propTypes = {
+  towers: PropTypes.arrayOf(PropTypes.array).isRequired,
+  selectedTower: PropTypes.number,
+  selectedDisk: PropTypes.number,
+  onTowerClick: PropTypes.func.isRequired,
+  onDiskDrop: PropTypes.func.isRequired,
 };
 
 export default GameBoard;
