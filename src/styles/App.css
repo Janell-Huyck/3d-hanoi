@@ -8,12 +8,10 @@
   margin: 0;
   background-color: #f9f9f9; /*Optional: Add a background color for contrast */
   padding: 20px;
-  box-sizing: border-box; /* Ensure padding is included in the height/width calculations */
 }
 
 .app-title {
   text-align: center;
   margin-bottom: 20px; /* Add spacing between the title and the game board */
-  font-size: 2em; /* Larger font for the title */
   color: #333; /* Title color */
 }

@@ -1,7 +1,7 @@
 .game-board {
   position: relative; /* Allows for positioning child elements */
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: flex-end;
   height: calc(90vh - 70px);

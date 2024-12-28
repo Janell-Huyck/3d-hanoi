@@ -6,6 +6,10 @@
   z-index: 1;
 }
 
+.disk.selected {
+  border: 1px solid black;
+}
+
 .red { background-color: red; }
 .orange { background-color: orange; }
 .yellow { background-color: yellow; }
