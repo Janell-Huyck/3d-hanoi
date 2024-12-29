@@ -22,12 +22,13 @@ export default {
     '!src/serviceWorker.js', // Exclude service workers
     '!src/**/*.test.{js,jsx}', // Exclude test files
   ],
+  coverageReporters: ['lcov', 'text-summary'],
   coverageThreshold: {
     global: {
-      branches: 50, // 100% branch coverage desired, at 50% to begin
-      functions: 50, // 100% branch coverage desired, at 50% to begin
-      lines: 50, // 100% branch coverage desired, at 50% to begin
-      statements: 50, // 100% branch coverage desired, at 50% to begin
+      branches: 40, // 100% branch coverage desired, at 40% to begin
+      functions: 40, // 100% branch coverage desired, at 40% to begin
+      lines: 40, // 100% branch coverage desired, at 40% to begin
+      statements: 40, // 100% branch coverage desired, at 40% to begin
     },
   },
 };

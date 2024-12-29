@@ -1,23 +1,35 @@
 name: Test Coverage
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 
 jobs:
   test-coverage:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
 
-      - name: Set up Node.js
+    steps:
+      # Step 1: Check out the repository
+      - uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Use Node.js 16.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 16.x
 
-      - name: Install Dependencies
-        run: npm install
+      # Step 3: Install dependencies and run tests
+      - name: Install Dependencies and Run Coverage
+        run: |
+          npm install
+          npm run coverage
+      - name: Debug Coverage Folder
+        run: ls -R coverage || echo "Coverage folder not found"
+        
 
-      - name: Run Tests with Coverage
-        run: npm run coverage
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      # Step 4: Upload coverage to Coveralls
+      - name: Upload to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }} # Use built-in token
+          file: ./coverage/lcov.info # Path to Jest coverage report
