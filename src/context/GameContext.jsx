@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import GameLogic from '../logic/GameLogic';
+import React, { createContext, useContext, useState, useCallback } from "react";
+import PropTypes from "prop-types";
+import GameLogic from "../logic/GameLogic";
 
 // Create the context
 const GameContext = createContext();
