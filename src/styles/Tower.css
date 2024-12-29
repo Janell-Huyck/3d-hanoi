@@ -10,6 +10,7 @@
   position: relative; /* Position context for internal items */
   background-color: transparent; /* Transparent tower */
   padding-bottom: 1rem;
+  transition: background-color 0.2s;
 }
 
 .tower.hovered, .tower.selected {

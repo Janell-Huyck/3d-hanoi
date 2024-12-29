@@ -1,40 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Tower from './Tower';
-import Base from './Base'
-import '../styles/GameBoard.css';
+import { Tower, Base } from './';
 
-const GameBoard = ({
-  towers,
-  selectedTower,
-  selectedDisk,
-  onTowerClick,
-  onDiskDrop,
-}) => {
+const GameBoard = () => {
+  const numberOfTowers = 3;
+
   return (
     <div className="game-board">
-      {towers.map((tower, towerIndex) => (
-        <Tower
-          key={towerIndex}
-          towerIndex={towerIndex}
-          disks={tower}
-          isSelected={selectedTower === towerIndex}
-          selectedDisk={selectedDisk}
-          onTowerClick={onTowerClick}
-          onDiskDrop={onDiskDrop}
-        />
+      {Array.from({ length: numberOfTowers }).map((_, index) => (
+        <Tower key={index} towerIndex={index} />
       ))}
       <Base />
     </div>
   );
-};
-
-GameBoard.propTypes = {
-  towers: PropTypes.arrayOf(PropTypes.array).isRequired,
-  selectedTower: PropTypes.number,
-  selectedDisk: PropTypes.number,
-  onTowerClick: PropTypes.func.isRequired,
-  onDiskDrop: PropTypes.func.isRequired,
 };
 
 export default GameBoard;
