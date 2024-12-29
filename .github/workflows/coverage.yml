@@ -22,16 +22,14 @@ jobs:
       - name: Install Dependencies and Run Coverage
         run: |
           npm install
-          npm run coverage
+          jest --coverage
+
       - name: Debug Coverage Folder
         run: ls -R coverage || echo "Coverage folder not found"
-        
 
-      # Step 4: Upload coverage to Coveralls
+      # Step 4: Upload to Coveralls
       - name: Upload to Coveralls
         uses: coverallsapp/github-action@v2
         with:
-          github-token: ${{ secrets.COVERALLS_REPO_TOKEN }} # Use built-in token
-          file: ./coverage/lcov.info # Path to Jest coverage report
-          base-path: .
-          debug: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./coverage/lcov.info
