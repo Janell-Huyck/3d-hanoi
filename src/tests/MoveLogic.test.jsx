@@ -1,4 +1,4 @@
-import GameLogic from "../logic/GameLogic";
+import GameLogic from "../logic/gameLogic";
 
 test("Valid move to empty tower", () => {
   const game = new GameLogic(3);

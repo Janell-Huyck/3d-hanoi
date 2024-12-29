@@ -1,4 +1,4 @@
-import GameLogic from '../logic/GameLogic';
+import GameLogic from '../logic/gameLogic';
 
 test('Towers initialize with correct number of disks', () => {
   const game = new GameLogic(3);
