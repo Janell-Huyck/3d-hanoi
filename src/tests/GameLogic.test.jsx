@@ -1,4 +1,4 @@
-import GameLogic from '../logic/gameLogic';
+import GameLogic from '../logic/GameLogic';
 
 
 test('Game is won when all disks are on a single tower', () => {

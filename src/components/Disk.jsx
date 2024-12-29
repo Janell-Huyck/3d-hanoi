@@ -1,37 +1,25 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useDrag } from 'react-dnd';
-import '../styles/Disk.css';
+import { useGame, useDndContext } from '../context';
 
-const Disk = ({ size, towerIndex, isTopDisk }) => {
-  const [{ isDragging }, drag, preview] = useDrag(() => ({
-    type: 'disk',
-    item: { size, sourceTowerIndex: towerIndex },
-    canDrag: isTopDisk, // Only allow dragging the top disk
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  }), [isTopDisk]); // Reinitialize if `isTopDisk` changes
+const Disk = ({ size, towerIndex }) => {
+  const { towers } = useGame();
+  const { useDiskDrag } = useDndContext();
+  const { isDragging, drag } = useDiskDrag(size, towerIndex);
 
-  useEffect(() => {
-    if (preview) {
-      preview(null); // Disable default drag preview for performance
-    }
-  }, [preview]);
+  const isTopDisk = towers[towerIndex].indexOf(size) === towers[towerIndex].length - 1;
 
-  // Determine classes for size and color
   const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
-  const colorClass = colors[size - 1] || colors[colors.length - 1];
+  const colorClass = colors[(size - 1) % colors.length];
   const sizeClass = `size-${size}`;
-  const diskClass = `disk ${colorClass} ${sizeClass}`;
 
   return (
     <div
-      ref={drag} // Always assign ref, even for non-draggable disks
-      className={diskClass}
+      ref={drag}
+      className={`disk ${colorClass} ${sizeClass}`}
       style={{
         opacity: isDragging ? 0.5 : 1,
-        cursor: isTopDisk ? 'grab' : 'not-allowed', // Show not-allowed cursor for non-top disks
+        cursor: isTopDisk ? 'grab' : 'not-allowed',
       }}
     >
       {size}
@@ -42,7 +30,6 @@ const Disk = ({ size, towerIndex, isTopDisk }) => {
 Disk.propTypes = {
   size: PropTypes.number.isRequired,
   towerIndex: PropTypes.number.isRequired,
-  isTopDisk: PropTypes.bool.isRequired, // Indicate if the disk is the top one
 };
 
 export default Disk;

@@ -1,33 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useDrop } from 'react-dnd';
-import Disk from './Disk';
-import TowerSpike from './TowerSpike';
-import '../styles/Tower.css';
+import { useGame, useClickMovementContext, useDndContext } from '../context';
+import { Disk, TowerSpike } from './';
 
-const Tower = ({ towerIndex, disks, isSelected, onTowerClick, onDiskDrop }) => {
-  const [{ isOver }, drop] = useDrop(() => ({
-    accept: 'disk',
-    drop: (item) => onDiskDrop(item.sourceTowerIndex, towerIndex),
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
-  }));
+const Tower = ({ towerIndex }) => {
+  const { towers, handleMoveDisk } = useGame();
+  const { handleTowerClick, selectedTower } = useClickMovementContext();
+  const { useTowerDrop } = useDndContext();
+  const { isOver, drop } = useTowerDrop(towerIndex, handleMoveDisk);
 
   return (
     <div
       ref={drop}
-      className={`tower ${isSelected ? 'selected' : ''} ${isOver ? 'hovered' : ''}`}
-      onClick={() => onTowerClick(towerIndex)}
+      className={`tower ${selectedTower === towerIndex ? 'selected' : ''} ${
+        isOver ? 'hovered' : ''
+      }`}
+      onClick={() => handleTowerClick(towerIndex)}
     >
-      <TowerSpike />
-      {disks.map((disk, index) => (
-        <Disk
-          key={index}
-          size={disk}
-          towerIndex={towerIndex}
-          isTopDisk={index === disks.length - 1} // Only the last disk in the array is draggable
-        />
+      <TowerSpike key={ towerIndex } />
+      {towers[towerIndex].map((disk) => (
+        <Disk key={disk} size={disk} towerIndex={towerIndex} />
       ))}
     </div>
   );
@@ -35,10 +27,6 @@ const Tower = ({ towerIndex, disks, isSelected, onTowerClick, onDiskDrop }) => {
 
 Tower.propTypes = {
   towerIndex: PropTypes.number.isRequired,
-  disks: PropTypes.arrayOf(PropTypes.number).isRequired,
-  isSelected: PropTypes.bool.isRequired,
-  onTowerClick: PropTypes.func.isRequired,
-  onDiskDrop: PropTypes.func.isRequired,
 };
 
 export default Tower;
