@@ -13,4 +13,21 @@ export default {
   transformIgnorePatterns: [
     '/node_modules/(?!(react-dnd|dnd-core|@react-dnd|react-dnd-html5-backend))',
   ], // Ensure these dependencies are transpiled
+
+  // Add coverage configuration
+  collectCoverage: true, // Enable coverage collection
+  collectCoverageFrom: [
+    'src/**/*.{js,jsx}', // Include all JavaScript and JSX files in src
+    '!src/index.js', // Exclude index.js
+    '!src/serviceWorker.js', // Exclude service workers
+    '!src/**/*.test.{js,jsx}', // Exclude test files
+  ],
+  coverageThreshold: {
+    global: {
+      branches: 50, // 100% branch coverage desired, at 50% to begin
+      functions: 50, // 100% branch coverage desired, at 50% to begin
+      lines: 50, // 100% branch coverage desired, at 50% to begin
+      statements: 50, // 100% branch coverage desired, at 50% to begin
+    },
+  },
 };
