@@ -4,7 +4,6 @@ import pluginReact from "eslint-plugin-react";
 import pluginJest from "eslint-plugin-jest";
 
 export default [
-  // Base configuration
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     languageOptions: {
@@ -44,5 +43,8 @@ export default [
         ...globals.jest,
       },
     },
+  },
+  {
+    ignores: ["coverage/"],
   },
 ];

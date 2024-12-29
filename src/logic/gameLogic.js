@@ -1,4 +1,3 @@
-// src/logic/GameLogic.js
 export default class GameLogic {
   constructor(numDisks) {
     this.numDisks = numDisks;
