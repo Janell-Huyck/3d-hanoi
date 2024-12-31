@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
-import PropTypes from "prop-types";
-import GameLogic from "../logic/gameLogic";
+import PropTypes from 'prop-types';
+import { GameLogic } from '@logics';
 
 // Create the context
 const GameContext = createContext();
@@ -14,7 +14,9 @@ export const useGame = () => {
 const GameProvider = ({ numDisks, children }) => {
   const [game] = useState(new GameLogic(numDisks));
   const [towers, setTowers] = useState([...game.towers]);
-
+  const [selectedDisk, setSelectedDisk] = useState(null);
+  const [selectedTower, setSelectedTower] = useState(null);
+  
   const handleMoveDisk = useCallback(
     (fromTower, toTower) => {
       try {
@@ -30,6 +32,10 @@ const GameProvider = ({ numDisks, children }) => {
   const value = {
     towers,
     handleMoveDisk,
+    selectedDisk,
+    setSelectedDisk,
+    selectedTower,
+    setSelectedTower,
     isGameWon: game.isGameWon.bind(game),
   };
 

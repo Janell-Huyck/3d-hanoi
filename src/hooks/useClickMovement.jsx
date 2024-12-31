@@ -1,25 +1,34 @@
-import { useState } from 'react';
+import { useGame } from '@contexts';
+import { resetSelection } from '@utils';
 
-const useClickMovement = (handleMoveDisk) => {
-  const [selectedDisk, setSelectedDisk] = useState(null);
-  const [selectedTower, setSelectedTower] = useState(null);
+const useClickMovement = () => {
+  const { selectedDisk, setSelectedDisk, selectedTower, setSelectedTower, handleMoveDisk, towers } = useGame();
 
   const handleTowerClick = (towerIndex) => {
+    const isEmptyTower = towers[towerIndex].length === 0;
+
     if (selectedDisk === null) {
-      setSelectedDisk(towerIndex); // Select the disk from the tower
-      setSelectedTower(towerIndex); // Record the selected tower
+      if (isEmptyTower) {
+        // Clicking on an empty tower without a selected disk should reset the selection
+        resetSelection(setSelectedDisk, setSelectedTower);
+      } else {
+        // Select the disk from the tower
+        setSelectedDisk(towerIndex);
+        setSelectedTower(towerIndex);
+      }
     } else {
-      handleMoveDisk(selectedTower, towerIndex); // Attempt to move the disk
-      resetSelection(); // Clear selection
+      if (isEmptyTower && selectedTower === towerIndex) {
+        // Clicking the same empty tower after selecting should reset the selection
+        resetSelection(setSelectedDisk, setSelectedTower);
+      } else {
+        // Attempt to move the disk
+        handleMoveDisk(selectedTower, towerIndex);
+        resetSelection(setSelectedDisk, setSelectedTower);
+      }
     }
   };
 
-  const resetSelection = () => {
-    setSelectedDisk(null);
-    setSelectedTower(null);
-  };
-
-  return { handleTowerClick, resetSelection, selectedDisk, selectedTower };
+  return { handleTowerClick, selectedDisk, selectedTower };
 };
 
 export default useClickMovement;
