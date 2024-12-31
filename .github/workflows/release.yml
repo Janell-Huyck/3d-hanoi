@@ -12,6 +12,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Set Up Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
       - name: Read Node.js Version from .nvmrc
         id: nvmrc
         run: echo "NODE_VERSION=$(cat .nvmrc)" >> $GITHUB_ENV
@@ -23,11 +28,6 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-
-      - name: Set Up Git
-        run: |
-          git config --global user.name "${{ github.actor }}"
-          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
 
       - name: Run Semantic Release
         env:
