@@ -9,22 +9,23 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Set Up Git
+        run: |
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Set Up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version-file: .nvmrc
+          node-version: 16
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm install
 
-      - name: Bump version and generate changelog
-        run: npm run version
+      - name: Run Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push changes and tags
-        run: |
-          git push --follow-tags
+        run: npx semantic-release
