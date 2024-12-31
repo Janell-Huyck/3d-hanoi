@@ -1,0 +1,50 @@
+name: Test Coverage and Upload to Coveralls
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  test-coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js
+      - name: Use Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      # Step 3: Install dependencies and run tests
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Verify Installed Packages
+        run: npm list --depth=0
+
+      - name: Verify Jest Binary
+        run: ls -l node_modules/.bin/jest || echo "Jest not found"
+
+      - name: Run Tests with Coverage
+        run: npx jest --coverage
+
+      - name: Verify Coverage Folder
+        run: |
+          ls -R coverage || echo "Coverage folder not found, check Jest configuration."
+
+      # Step 4: Upload to Coveralls
+      - name: Upload Coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./coverage/lcov.info

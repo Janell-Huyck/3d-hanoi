@@ -1,0 +1,18 @@
+.tower {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse; /* Stack items vertically */
+  justify-content: flex-start; /* Align spike and disks to the bottom */
+  align-items: center; /* Center items horizontally */
+  height: 100%; /* Full height of the container */
+  width: 30%; /* Width of each tower */
+  min-height: 180px;
+  position: relative; /* Position context for internal items */
+  background-color: transparent; /* Transparent tower */
+  padding-bottom: 1rem;
+  transition: background-color 0.2s;
+}
+
+.tower.hovered, .tower.selected {
+  background-color: lightblue;
+}

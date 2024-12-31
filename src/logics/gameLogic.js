@@ -1,4 +1,4 @@
-export default class TowerOfHanoi {
+export default class GameLogic {
   constructor(numDisks) {
     this.numDisks = numDisks;
     this.towers = [[], [], []];
@@ -8,9 +8,7 @@ export default class TowerOfHanoi {
   }
 
   moveDisk(fromTower, toTower) {
-    if (fromTower === toTower) {
-      return;
-    }
+    if (fromTower === toTower) return;
 
     const disk = this.towers[fromTower].pop();
     if (!this.isMoveValid(disk, toTower)) {
@@ -26,6 +24,8 @@ export default class TowerOfHanoi {
   }
 
   isGameWon() {
-    return this.towers[1].length === this.numDisks || this.towers[2].length === this.numDisks;
+    return (
+      this.towers[1].length === this.numDisks || this.towers[2].length === this.numDisks
+    );
   }
 }
