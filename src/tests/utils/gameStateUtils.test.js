@@ -28,7 +28,6 @@ describe('gameStateUtils', () => {
       const towers = [[3, 2, 1], [], []];
       expect(isTopDisk(towers, 1, 1)).toBe(false); // Disk 1 is not in tower 1
     });
-    
 
     test('handles empty towers gracefully', () => {
       const towers = [[], [], []];

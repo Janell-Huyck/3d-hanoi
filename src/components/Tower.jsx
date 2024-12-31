@@ -17,7 +17,7 @@ const Tower = ({ towerIndex }) => {
       }`}
       onClick={() => handleTowerClick(towerIndex)}
     >
-      <TowerSpike key={ towerIndex } />
+      <TowerSpike key={towerIndex} />
       {towers[towerIndex].map((disk) => (
         <Disk key={disk} size={disk} towerIndex={towerIndex} />
       ))}

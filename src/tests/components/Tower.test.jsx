@@ -107,9 +107,8 @@ describe('Tower Component', () => {
       handleMoveDisk: mockHandleMoveDisk,
       selectedTower: 1, // A different tower index is selected
     });
-  
+
     const { container } = render(<Tower towerIndex={0} />);
     expect(container.firstChild).not.toHaveClass('selected');
   });
-  
 });

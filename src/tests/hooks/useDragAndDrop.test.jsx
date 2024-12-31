@@ -50,7 +50,9 @@ describe('useDragAndDrop hooks', () => {
         const { isDragging, drag } = useDiskDrag(3, 0, true);
         return (
           <div>
-            <div data-testid="dragging">{isDragging ? 'Dragging' : 'Not Dragging'}</div>
+            <div data-testid="dragging">
+              {isDragging ? 'Dragging' : 'Not Dragging'}
+            </div>
             <div data-testid="drag-ref" ref={drag}></div>
           </div>
         );
@@ -59,7 +61,10 @@ describe('useDragAndDrop hooks', () => {
       const { getByTestId } = render(<TestComponent />);
 
       expect(getByTestId('dragging')).toHaveTextContent('Dragging');
-      expect(resetSelection).toHaveBeenCalledWith(mockSetSelectedDisk, mockSetSelectedTower);
+      expect(resetSelection).toHaveBeenCalledWith(
+        mockSetSelectedDisk,
+        mockSetSelectedTower,
+      );
     });
   });
 

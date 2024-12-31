@@ -18,3 +18,4 @@ if ! npm test; then
       ;;
   esac
 fi
+npx lint-staged

@@ -1,3 +1,3 @@
 export { resetSelection, isTopDisk } from './gameStateUtils';
 
-export { getDiskColor } from './diskUtils'
+export { getDiskColor } from './diskUtils';

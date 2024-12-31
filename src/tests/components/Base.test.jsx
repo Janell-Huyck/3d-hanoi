@@ -19,6 +19,8 @@ describe('Base Component', () => {
   test('does not introduce accessibility violations', async () => {
     const { container } = render(<Base />);
     const results = await axe(container);
-    expect(results).toHaveNoViolations('The Base component must be accessible.');
+    expect(results).toHaveNoViolations(
+      'The Base component must be accessible.',
+    );
   });
 });
