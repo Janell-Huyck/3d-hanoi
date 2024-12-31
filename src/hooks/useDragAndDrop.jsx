@@ -5,17 +5,20 @@ import { resetSelection } from '@utils';
 export const useDiskDrag = (size, towerIndex, isTopDisk) => {
   const { setSelectedDisk, setSelectedTower } = useGame();
 
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: 'disk',
-    item: () => {
-      resetSelection(setSelectedDisk, setSelectedTower); // Reset selection when drag starts
-      return { size, sourceTowerIndex: towerIndex };
-    },
-    canDrag: isTopDisk,
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
+  const [{ isDragging }, drag] = useDrag(
+    () => ({
+      type: 'disk',
+      item: () => {
+        resetSelection(setSelectedDisk, setSelectedTower); // Reset selection when drag starts
+        return { size, sourceTowerIndex: towerIndex };
+      },
+      canDrag: isTopDisk,
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
     }),
-  }), [isTopDisk, towerIndex, setSelectedDisk, setSelectedTower]);
+    [isTopDisk, towerIndex, setSelectedDisk, setSelectedTower],
+  );
 
   return { isDragging, drag };
 };

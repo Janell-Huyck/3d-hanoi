@@ -20,12 +20,15 @@ export default class GameLogic {
 
   isMoveValid(disk, toTower) {
     const targetTower = this.towers[toTower];
-    return targetTower.length === 0 || disk < targetTower[targetTower.length - 1];
+    return (
+      targetTower.length === 0 || disk < targetTower[targetTower.length - 1]
+    );
   }
 
   isGameWon() {
     return (
-      this.towers[1].length === this.numDisks || this.towers[2].length === this.numDisks
+      this.towers[1].length === this.numDisks ||
+      this.towers[2].length === this.numDisks
     );
   }
 }

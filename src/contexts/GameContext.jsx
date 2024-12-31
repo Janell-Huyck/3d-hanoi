@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { GameLogic } from '@logics';
 
@@ -16,7 +16,7 @@ const GameProvider = ({ numDisks, children }) => {
   const [towers, setTowers] = useState([...game.towers]);
   const [selectedDisk, setSelectedDisk] = useState(null);
   const [selectedTower, setSelectedTower] = useState(null);
-  
+
   const handleMoveDisk = useCallback(
     (fromTower, toTower) => {
       try {
@@ -26,7 +26,7 @@ const GameProvider = ({ numDisks, children }) => {
         alert(error.message);
       }
     },
-    [game]
+    [game],
   );
 
   const value = {

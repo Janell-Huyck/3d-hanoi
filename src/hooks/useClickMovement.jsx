@@ -2,7 +2,14 @@ import { useGame } from '@contexts';
 import { resetSelection } from '@utils';
 
 const useClickMovement = () => {
-  const { selectedDisk, setSelectedDisk, selectedTower, setSelectedTower, handleMoveDisk, towers } = useGame();
+  const {
+    selectedDisk,
+    setSelectedDisk,
+    selectedTower,
+    setSelectedTower,
+    handleMoveDisk,
+    towers,
+  } = useGame();
 
   const handleTowerClick = (towerIndex) => {
     const isEmptyTower = towers[towerIndex].length === 0;

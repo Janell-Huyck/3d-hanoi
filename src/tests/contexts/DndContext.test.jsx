@@ -1,12 +1,12 @@
 /**
  * DndContext.test.jsx
- * 
+ *
  * Tests the functionality of the DndProviderContext, a wrapper for react-dnd's DndProvider.
- * 
- * - Mocks the DndProvider to validate its `backend` prop and ensure proper rendering 
+ *
+ * - Mocks the DndProvider to validate its `backend` prop and ensure proper rendering
  *   of children within the context.
  * - Verifies support for custom backends and ensures they are passed correctly to the DndProvider.
- * - Includes tests for default behavior, custom backend handling, and PropTypes validation 
+ * - Includes tests for default behavior, custom backend handling, and PropTypes validation
  *   (e.g., ensuring children are provided).
  * - Uses jest mock functions to control the behavior of the DndProvider for precise testing.
  */
@@ -19,12 +19,14 @@ import { DndProvider } from 'react-dnd';
 // Mock DndProvider to verify backend prop
 jest.mock('react-dnd', () => ({
   DndProvider: jest.fn(({ backend, children }) => (
-    <div data-testid="mock-dnd-provider" data-backend={backend?.name || 'createBackend'}>
+    <div
+      data-testid="mock-dnd-provider"
+      data-backend={backend?.name || 'createBackend'}
+    >
       {children}
     </div>
   )),
 }));
-
 
 describe('DndProviderContext', () => {
   afterEach(() => {
@@ -35,27 +37,27 @@ describe('DndProviderContext', () => {
     render(
       <DndProviderContext>
         <div data-testid="child">Test Child</div>
-      </DndProviderContext>
+      </DndProviderContext>,
     );
-  
+
     expect(screen.getByTestId('child')).toBeInTheDocument();
     expect(screen.getByTestId('mock-dnd-provider')).toHaveAttribute(
       'data-backend',
-      'createBackend' // Matches the mock behavior
+      'createBackend', // Matches the mock behavior
     );
   });
-  
+
   test('supports a custom backend', () => {
     const CustomBackend = jest.fn();
     render(
       <DndProvider backend={CustomBackend}>
         <div data-testid="child">Test Child</div>
-      </DndProvider>
+      </DndProvider>,
     );
 
     expect(screen.getByTestId('mock-dnd-provider')).toHaveAttribute(
       'data-backend',
-      'mockConstructor'
+      'mockConstructor',
     );
   });
 
@@ -64,28 +66,28 @@ describe('DndProviderContext', () => {
     render(
       <DndProvider backend={CustomBackend}>
         <div data-testid="child">Test Child</div>
-      </DndProvider>
+      </DndProvider>,
     );
 
     expect(DndProvider).toHaveBeenCalledWith(
       expect.objectContaining({ backend: CustomBackend }),
-      expect.anything()
+      expect.anything(),
     );
   });
 
   test('logs a warning if children are not provided', () => {
     const originalConsoleError = console.error;
     console.error = jest.fn();
-  
+
     render(<DndProviderContext />);
-  
+
     expect(console.error).toHaveBeenCalledWith(
       'Warning: Failed %s type: %s%s',
       'prop',
       'The prop `children` is marked as required in `DndProviderContext`, but its value is `undefined`.',
-      expect.stringContaining('at children') // Matches the file and line location in the message
+      expect.stringContaining('at children'), // Matches the file and line location in the message
     );
-  
+
     console.error = originalConsoleError;
   });
 });

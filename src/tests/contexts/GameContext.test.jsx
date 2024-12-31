@@ -1,15 +1,15 @@
 /**
  * GameContext.test.jsx
- * 
+ *
  * Tests the functionality of the GameContext and its associated provider, GameProvider.
- * 
+ *
  * - MockConsumer: A mock React component that consumes the GameContext to simulate
  *   interactions and validate state changes (e.g., towers, selectedDisk, selectedTower).
- * - GameLogic: Mocked to control the behavior of game logic methods like `moveDisk` 
+ * - GameLogic: Mocked to control the behavior of game logic methods like `moveDisk`
  *   and `isGameWon`, allowing precise simulation of game states.
  * - Includes tests for default values, state updates (e.g., selectedDisk, selectedTower),
  *   and error handling when an invalid move is made.
- * 
+ *
  * Mocking, state verification, and edge cases are handled to ensure full coverage.
  */
 
@@ -57,11 +57,23 @@ const MockConsumer = () => {
 };
 
 describe('GameContext', () => {
+  let originalAlert;
   const mockMoveDisk = jest.fn();
   const mockIsGameWon = jest.fn();
 
   const renderWithProvider = (ui = <MockConsumer />) =>
     render(<GameProvider numDisks={3}>{ui}</GameProvider>);
+
+  beforeAll(() => {
+    // Save the original implementation of window.alert
+    originalAlert = window.alert;
+    window.alert = jest.fn();
+  });
+
+  afterAll(() => {
+    // Restore the original implementation of window.alert
+    window.alert = originalAlert;
+  });
 
   beforeEach(() => {
     GameLogic.mockImplementation(() => ({
@@ -129,23 +141,17 @@ describe('GameContext', () => {
   });
 
   test('calls alert with error message on invalid move', () => {
-    const originalAlert = window.alert;
-    window.alert = jest.fn();
+    const mockError = new Error('Invalid move!');
+    mockMoveDisk.mockImplementation(() => {
+      throw mockError;
+    });
 
-    try {
-      const mockError = new Error('Invalid move!');
-      mockMoveDisk.mockImplementation(() => {
-        throw mockError;
-      });
+    renderWithProvider();
 
-      renderWithProvider();
+    fireEvent.click(screen.getByTestId('move-disk'));
 
-      fireEvent.click(screen.getByTestId('move-disk'));
-
-      expect(window.alert).toHaveBeenCalledWith('Invalid move!');
-    } finally {
-      window.alert = originalAlert;
-    }
+    // Ensure the alert was called with the correct message
+    expect(window.alert).toHaveBeenCalledWith('Invalid move!');
   });
 
   test('handles edge case: calling handleMoveDisk with same source and destination tower', () => {

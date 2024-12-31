@@ -18,20 +18,23 @@ describe('Components Index File', () => {
       // Dynamically import each component file
       const componentFileExports = require(path.join(componentsDir, file));
 
-      Object.entries(componentFileExports).forEach(([exportKey, exportValue]) => {
-        if (exportKey === 'default') {
-          // Check if the default export is re-exported under an expected named key
-          const expectedExportName = `${file.replace(/\.(js|jsx)$/, '').charAt(0).toUpperCase()}${file
-            .replace(/\.(js|jsx)$/, '')
-            .slice(1)}`;
-          expect(exportedKeys).toContain(expectedExportName);
-          expect(componentsIndex[expectedExportName]).toBe(exportValue);
-        } else {
-          // Check if named exports are re-exported correctly
-          expect(exportedKeys).toContain(exportKey);
-          expect(componentsIndex[exportKey]).toBe(exportValue);
-        }
-      });
+      Object.entries(componentFileExports).forEach(
+        ([exportKey, exportValue]) => {
+          if (exportKey === 'default') {
+            // Check if the default export is re-exported under an expected named key
+            const expectedExportName = `${file
+              .replace(/\.(js|jsx)$/, '')
+              .charAt(0)
+              .toUpperCase()}${file.replace(/\.(js|jsx)$/, '').slice(1)}`;
+            expect(exportedKeys).toContain(expectedExportName);
+            expect(componentsIndex[expectedExportName]).toBe(exportValue);
+          } else {
+            // Check if named exports are re-exported correctly
+            expect(exportedKeys).toContain(exportKey);
+            expect(componentsIndex[exportKey]).toBe(exportValue);
+          }
+        },
+      );
     });
   });
 });

@@ -40,10 +40,9 @@ describe('GameLogic', () => {
         game.moveDisk(0, 2); // Valid move: [1] from tower 0 to 2
         game.moveDisk(0, 2); // Invalid move: [2] cannot go on top of [1]
       }).toThrow('Invalid move!');
-      
+
       expect(game.towers).toEqual([[3, 2], [], [1]]); // Correct expected state
     });
-    
   });
 
   describe('isMoveValid', () => {

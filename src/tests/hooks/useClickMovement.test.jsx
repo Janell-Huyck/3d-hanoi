@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { useGame } from '@contexts';
-import { useClickMovement }  from '@hooks';
+import { useClickMovement } from '@hooks';
 import { resetSelection } from '@utils';
 
 jest.mock('@contexts', () => ({
@@ -23,8 +23,12 @@ const MockConsumer = () => {
       <button data-testid="tower-1" onClick={() => handleTowerClick(1)}>
         Tower 1
       </button>
-      <div data-testid="selected-disk">{selectedDisk !== null ? `Disk ${selectedDisk}` : 'None'}</div>
-      <div data-testid="selected-tower">{selectedTower !== null ? `Tower ${selectedTower}` : 'None'}</div>
+      <div data-testid="selected-disk">
+        {selectedDisk !== null ? `Disk ${selectedDisk}` : 'None'}
+      </div>
+      <div data-testid="selected-tower">
+        {selectedTower !== null ? `Tower ${selectedTower}` : 'None'}
+      </div>
     </div>
   );
 };
@@ -55,7 +59,10 @@ describe('useClickMovement', () => {
     const { getByTestId } = render(<MockConsumer />);
 
     fireEvent.click(getByTestId('tower-0'));
-    expect(resetSelection).toHaveBeenCalledWith(mockSetSelectedDisk, mockSetSelectedTower);
+    expect(resetSelection).toHaveBeenCalledWith(
+      mockSetSelectedDisk,
+      mockSetSelectedTower,
+    );
   });
 
   test('selects a disk from a tower', () => {
@@ -77,7 +84,10 @@ describe('useClickMovement', () => {
     const { getByTestId } = render(<MockConsumer />);
 
     fireEvent.click(getByTestId('tower-0'));
-    expect(resetSelection).toHaveBeenCalledWith(mockSetSelectedDisk, mockSetSelectedTower);
+    expect(resetSelection).toHaveBeenCalledWith(
+      mockSetSelectedDisk,
+      mockSetSelectedTower,
+    );
   });
 
   test('moves a disk and resets selection', () => {
@@ -92,6 +102,9 @@ describe('useClickMovement', () => {
 
     fireEvent.click(getByTestId('tower-1'));
     expect(mockHandleMoveDisk).toHaveBeenCalledWith(0, 1);
-    expect(resetSelection).toHaveBeenCalledWith(mockSetSelectedDisk, mockSetSelectedTower);
+    expect(resetSelection).toHaveBeenCalledWith(
+      mockSetSelectedDisk,
+      mockSetSelectedTower,
+    );
   });
 });

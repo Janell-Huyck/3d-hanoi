@@ -1,8 +1,7 @@
 import React from 'react';
 import { axe } from 'jest-axe';
 import { render } from '@testing-library/react';
-import { GameBoard }  from '@components';
-
+import { GameBoard } from '@components';
 
 jest.mock('@components/Tower', () => ({
   __esModule: true, // Ensures it can be imported as an ES module
@@ -13,7 +12,6 @@ jest.mock('@components/Base', () => ({
   __esModule: true,
   default: jest.fn(() => <div data-testid="base-mock"></div>),
 }));
-
 
 describe('GameBoard Component', () => {
   test('renders without crashing', () => {

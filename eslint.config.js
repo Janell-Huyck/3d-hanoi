@@ -1,50 +1,35 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import pluginReact from "eslint-plugin-react";
-import pluginJest from "eslint-plugin-jest";
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+import pluginReact from 'eslint-plugin-react';
+import pluginPrettier from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 
+/** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    files: ["**/*.{js,mjs,cjs,jsx}"],
+    files: ['**/*.{js,mjs,cjs,jsx}'],
+  },
+  {
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
+      globals: { ...globals.browser, ...globals.node, ...globals.jest },
     },
   },
   pluginJs.configs.recommended,
-  pluginReact.configs.flat.recommended,
   {
-    files: ["**/*.{jsx,js}"],
+    ...pluginReact.configs.flat.recommended,
     settings: {
       react: {
-        version: "detect",
+        version: 'detect', // Automatically detect React version from package.json
       },
     },
-    languageOptions: {
-      globals: {
-        ...globals.react, // Add React globals for JSX runtime
-      },
+  },
+  {
+    plugins: {
+      prettier: pluginPrettier,
     },
     rules: {
-      "react/react-in-jsx-scope": "off", // Disable this rule
+      'prettier/prettier': 'error', // Ensures Prettier formatting issues are treated as ESLint errors
     },
   },
-  {
-    files: ["**/*.test.{js,jsx}"],
-    plugins: {
-      jest: pluginJest,
-    },
-    languageOptions: {
-      globals: {
-        ...globals.jest,
-      },
-    },
-  },
-  {
-    ignores: ["coverage/"],
-  },
+  prettierConfig, // Extends ESLint configuration to disable conflicting formatting rules
 ];
