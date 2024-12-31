@@ -33,10 +33,10 @@ export default {
   coverageReporters: ['lcov', 'text-summary'], // Use lcov for detailed coverage reports and text-summary for CLI output
   coverageThreshold: {
     global: {
-      branches: 40, // Current branch coverage threshold
-      functions: 40, // Current function coverage threshold
-      lines: 40, // Current line coverage threshold
-      statements: 40, // Current statement coverage threshold
+      branches: 100, // Current branch coverage threshold
+      functions: 100, // Current function coverage threshold
+      lines: 100, // Current line coverage threshold
+      statements: 100, // Current statement coverage threshold
     },
   },
 };
