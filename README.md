@@ -1,1 +1,1 @@
-[![Coverage Status](https://coveralls.io/repos/github/Janell-Huyck/3d-hanoi/badge.svg?branch=dev)](https://coveralls.io/github/Janell-Huyck/3d-hanoi?branch=dev)
+[![Coverage Status](https://coveralls.io/repos/github/Janell-Huyck/3d-hanoi/badge.svg?branch=dev)](https://coveralls.io/github/Janell-Huyck/3d-hanoi?branch=main)

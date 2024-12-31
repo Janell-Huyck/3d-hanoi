@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tower, Base } from './';
+import { Tower, Base } from '@components';
 
 const GameBoard = () => {
   const numberOfTowers = 3;

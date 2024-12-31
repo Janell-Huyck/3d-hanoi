@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useGame, useClickMovementContext, useDndContext } from '../context';
-import { Disk, TowerSpike } from './';
+import { useGame } from '@contexts';
+import { Disk, TowerSpike } from '@components';
+import { useClickMovement, useTowerDrop } from '@hooks';
 
 const Tower = ({ towerIndex }) => {
-  const { towers, handleMoveDisk } = useGame();
-  const { handleTowerClick, selectedTower } = useClickMovementContext();
-  const { useTowerDrop } = useDndContext();
+  const { towers, handleMoveDisk, selectedTower } = useGame();
+  const { handleTowerClick } = useClickMovement();
   const { isOver, drop } = useTowerDrop(towerIndex, handleMoveDisk);
 
   return (

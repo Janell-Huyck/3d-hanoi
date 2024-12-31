@@ -1,21 +1,17 @@
 import React from 'react';
-import { GameBoard } from './components';
-import { GameProvider, ClickMovementProvider, DndProviderContext } from './context';
+import { GameBoard } from '@components';
+import { Providers } from '@contexts';
 
 function App() {
   return (
-     <React.StrictMode>
+    <React.StrictMode>
       <div className="app-container">
         <h1 className="app-title">Tower of Hanoi</h1>
-         <GameProvider numDisks={2}>
-           <ClickMovementProvider>
-             <DndProviderContext>
-               <GameBoard />
-             </DndProviderContext>
-           </ClickMovementProvider>
-         </GameProvider>
-       </div>
-     </React.StrictMode>
+        <Providers>
+          <GameBoard />
+        </Providers>
+      </div>
+    </React.StrictMode>
   );
 }
 
