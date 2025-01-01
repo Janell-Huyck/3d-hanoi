@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { GameProvider, DndProviderContext } from '@contexts';
+import GameProvider from './GameContext';
+import DndProviderContext from './DndContext';
 
 const Providers = ({ children, numDisks = 2 }) => (
   <GameProvider numDisks={numDisks}>

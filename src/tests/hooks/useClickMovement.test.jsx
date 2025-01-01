@@ -2,16 +2,19 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { useGame } from '@contexts';
 import { useClickMovement } from '@hooks';
-import { resetSelection } from '@utils';
+import { resetSelection, clearMessages } from '@utils';
 
+// Mock dependencies
 jest.mock('@contexts', () => ({
   useGame: jest.fn(),
 }));
 
 jest.mock('@utils', () => ({
   resetSelection: jest.fn(),
+  clearMessages: jest.fn(),
 }));
 
+// Mock consumer for testing
 const MockConsumer = () => {
   const { handleTowerClick, selectedDisk, selectedTower } = useClickMovement();
 
@@ -33,78 +36,103 @@ const MockConsumer = () => {
   );
 };
 
-describe('useClickMovement', () => {
-  const mockSetSelectedDisk = jest.fn();
-  const mockSetSelectedTower = jest.fn();
-  const mockHandleMoveDisk = jest.fn();
+// Helper function to render with mocked context
+const renderWithMockedGame = (overrides = {}) => {
+  useGame.mockReturnValue({
+    selectedDisk: null,
+    setSelectedDisk: jest.fn(),
+    selectedTower: null,
+    setSelectedTower: jest.fn(),
+    handleMoveDisk: jest.fn(),
+    towers: [[3, 2, 1], [], []],
+    ...overrides,
+  });
 
+  return render(<MockConsumer />);
+};
+
+describe('useClickMovement', () => {
   beforeEach(() => {
-    useGame.mockReturnValue({
-      selectedDisk: null,
-      setSelectedDisk: mockSetSelectedDisk,
-      selectedTower: null,
-      setSelectedTower: mockSetSelectedTower,
-      handleMoveDisk: mockHandleMoveDisk,
-      towers: [[3, 2, 1], [], []],
-    });
     jest.clearAllMocks();
   });
 
   test('resets selection when clicking on an empty tower without a selected disk', () => {
-    useGame.mockReturnValueOnce({
-      ...useGame(),
+    const mockSetSelectedDisk = jest.fn();
+    const mockSetSelectedTower = jest.fn();
+
+    const { getByTestId } = renderWithMockedGame({
       towers: [[], [], []],
+      setSelectedDisk: mockSetSelectedDisk,
+      setSelectedTower: mockSetSelectedTower,
     });
 
-    const { getByTestId } = render(<MockConsumer />);
-
     fireEvent.click(getByTestId('tower-0'));
+
     expect(resetSelection).toHaveBeenCalledWith(
       mockSetSelectedDisk,
       mockSetSelectedTower,
     );
+    expect(clearMessages).toHaveBeenCalled();
   });
 
   test('selects a disk from a tower', () => {
-    const { getByTestId } = render(<MockConsumer />);
+    const mockSetSelectedDisk = jest.fn();
+    const mockSetSelectedTower = jest.fn();
+
+    const { getByTestId } = renderWithMockedGame({
+      setSelectedDisk: mockSetSelectedDisk,
+      setSelectedTower: mockSetSelectedTower,
+    });
 
     fireEvent.click(getByTestId('tower-0'));
+
     expect(mockSetSelectedDisk).toHaveBeenCalledWith(0);
     expect(mockSetSelectedTower).toHaveBeenCalledWith(0);
+    expect(clearMessages).toHaveBeenCalled();
   });
 
   test('resets selection when clicking the same empty tower after selecting', () => {
-    useGame.mockReturnValueOnce({
-      ...useGame(),
+    const mockSetSelectedDisk = jest.fn();
+    const mockSetSelectedTower = jest.fn();
+
+    const { getByTestId } = renderWithMockedGame({
       selectedDisk: 3,
       selectedTower: 0,
       towers: [[], [], []],
+      setSelectedDisk: mockSetSelectedDisk,
+      setSelectedTower: mockSetSelectedTower,
     });
 
-    const { getByTestId } = render(<MockConsumer />);
-
     fireEvent.click(getByTestId('tower-0'));
+
     expect(resetSelection).toHaveBeenCalledWith(
       mockSetSelectedDisk,
       mockSetSelectedTower,
     );
+    expect(clearMessages).toHaveBeenCalled();
   });
 
   test('moves a disk and resets selection', () => {
-    useGame.mockReturnValueOnce({
-      ...useGame(),
+    const mockSetSelectedDisk = jest.fn();
+    const mockSetSelectedTower = jest.fn();
+    const mockHandleMoveDisk = jest.fn();
+
+    const { getByTestId } = renderWithMockedGame({
       selectedDisk: 3,
       selectedTower: 0,
       towers: [[3, 2, 1], [], []],
+      setSelectedDisk: mockSetSelectedDisk,
+      setSelectedTower: mockSetSelectedTower,
+      handleMoveDisk: mockHandleMoveDisk,
     });
 
-    const { getByTestId } = render(<MockConsumer />);
-
     fireEvent.click(getByTestId('tower-1'));
+
     expect(mockHandleMoveDisk).toHaveBeenCalledWith(0, 1);
     expect(resetSelection).toHaveBeenCalledWith(
       mockSetSelectedDisk,
       mockSetSelectedTower,
     );
+    expect(clearMessages).toHaveBeenCalled();
   });
 });

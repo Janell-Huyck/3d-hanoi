@@ -12,21 +12,27 @@ export const useGame = () => {
 
 // Provider component
 const GameProvider = ({ numDisks, children }) => {
-  const [game] = useState(new GameLogic(numDisks));
+  const [game] = useState(() => new GameLogic(numDisks));
   const [towers, setTowers] = useState([...game.towers]);
   const [selectedDisk, setSelectedDisk] = useState(null);
   const [selectedTower, setSelectedTower] = useState(null);
+  const [victoryMessage, setVictoryMessage] = useState('');
+  const [invalidMoveMessage, setInvalidMoveMessage] = useState('');
 
   const handleMoveDisk = useCallback(
     (fromTower, toTower) => {
       try {
         game.moveDisk(fromTower, toTower);
         setTowers([...game.towers]);
+
+        if (game.isGameWon()) {
+          setVictoryMessage('Congratulations! You have won the game!');
+        }
       } catch (error) {
-        alert(error.message);
+        setInvalidMoveMessage(error.message);
       }
     },
-    [game],
+    [game], // Dependency on `game`
   );
 
   const value = {
@@ -36,6 +42,10 @@ const GameProvider = ({ numDisks, children }) => {
     setSelectedDisk,
     selectedTower,
     setSelectedTower,
+    setVictoryMessage,
+    victoryMessage,
+    setInvalidMoveMessage,
+    invalidMoveMessage,
     isGameWon: game.isGameWon.bind(game),
   };
 

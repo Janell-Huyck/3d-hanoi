@@ -21,7 +21,7 @@ export default class GameLogic {
   isMoveValid(disk, toTower) {
     const targetTower = this.towers[toTower];
     return (
-      targetTower.length === 0 || disk < targetTower[targetTower.length - 1]
+      targetTower.length === 0 || disk <= targetTower[targetTower.length - 1]
     );
   }
 
