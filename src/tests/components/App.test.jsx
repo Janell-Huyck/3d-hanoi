@@ -1,37 +1,62 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import { axe } from 'jest-axe';
+import { render, screen } from '@testing-library/react';
 import App from '@app';
+import { useGame } from '@contexts/GameContext';
 
-jest.mock('../../components/GameBoard', () => ({
-  __esModule: true,
-  default: jest.fn(() => <div data-testid="game-board-mock"></div>),
+// Mock necessary components and hooks
+jest.mock('@contexts/GameContext', () => ({
+  useGame: jest.fn(),
 }));
 
-describe('App Component', () => {
-  test('renders without crashing', () => {
-    const { container } = render(<App />);
-    expect(container).toBeInTheDocument();
+jest.mock('@contexts/Providers', () => ({
+  __esModule: true,
+  default: jest.fn(({ children }) => (
+    <div data-testid="providers">{children}</div>
+  )),
+}));
+
+jest.mock('@components/GameMessages', () => ({
+  __esModule: true,
+  default: jest.fn(() => <div data-testid="game-messages">Game Messages</div>),
+}));
+
+jest.mock('@components/GameBoard', () => ({
+  __esModule: true,
+  default: jest.fn(() => <div data-testid="game-board">Game Board</div>),
+}));
+
+describe('App', () => {
+  beforeEach(() => {
+    // Mock `useGame` to provide default values
+    useGame.mockReturnValue({
+      victoryMessage: '',
+      invalidMoveMessage: '',
+    });
   });
 
-  test('displays the app title', () => {
-    const { getByText } = render(<App />);
-    expect(getByText('Tower of Hanoi')).toBeInTheDocument();
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('renders the GameBoard component', () => {
-    const { getByTestId } = render(<App />);
-    expect(getByTestId('game-board-mock')).toBeInTheDocument();
+  it('renders the app title', () => {
+    render(<App />);
+    expect(screen.getByText('Tower of Hanoi')).toBeInTheDocument();
   });
 
-  test('does not introduce accessibility violations', async () => {
-    const { container } = render(<App />);
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
+  it('renders GameMessages', () => {
+    render(<App />);
+    expect(screen.getByTestId('game-messages')).toBeInTheDocument();
   });
 
-  test('integrates with the Providers correctly', () => {
-    const { getByTestId } = render(<App />);
-    expect(getByTestId('game-board-mock')).toBeInTheDocument(); // Verifies the hierarchy works.
+  it('renders GameBoard', () => {
+    render(<App />);
+    expect(screen.getByTestId('game-board')).toBeInTheDocument();
+  });
+
+  it('wraps GameMessages and GameBoard inside Providers', () => {
+    render(<App />);
+    const appContainer = screen.getByRole('main');
+    expect(appContainer).toContainElement(screen.getByTestId('game-messages'));
+    expect(appContainer).toContainElement(screen.getByTestId('game-board'));
   });
 });

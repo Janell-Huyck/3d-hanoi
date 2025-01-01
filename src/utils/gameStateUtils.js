@@ -7,3 +7,8 @@ export const isTopDisk = (towers, towerIndex, size) => {
   const diskIndex = towers[towerIndex].indexOf(size);
   return diskIndex !== -1 && diskIndex === towers[towerIndex].length - 1;
 };
+
+export const clearMessages = (setInvalidMoveMessage, setVictoryMessage) => {
+  setInvalidMoveMessage('');
+  setVictoryMessage('');
+};

@@ -1,4 +1,8 @@
-import { resetSelection, isTopDisk } from '@utils/gameStateUtils';
+import {
+  resetSelection,
+  isTopDisk,
+  clearMessages,
+} from '@utils/gameStateUtils';
 
 describe('gameStateUtils', () => {
   describe('resetSelection', () => {
@@ -32,6 +36,18 @@ describe('gameStateUtils', () => {
     test('handles empty towers gracefully', () => {
       const towers = [[], [], []];
       expect(isTopDisk(towers, 0, 1)).toBe(false); // No disk in tower 0
+    });
+  });
+
+  describe('clearMessages', () => {
+    it('resets invalidMoveMessage and victoryMessage to empty strings', () => {
+      const setInvalidMoveMessage = jest.fn();
+      const setVictoryMessage = jest.fn();
+
+      clearMessages(setInvalidMoveMessage, setVictoryMessage);
+
+      expect(setInvalidMoveMessage).toHaveBeenCalledWith('');
+      expect(setVictoryMessage).toHaveBeenCalledWith('');
     });
   });
 });

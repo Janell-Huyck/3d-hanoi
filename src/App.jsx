@@ -1,14 +1,17 @@
 import React from 'react';
-import { GameBoard } from '@components';
+import { GameBoard, GameMessages } from '@components';
 import { Providers } from '@contexts';
 
 function App() {
   return (
     <React.StrictMode>
       <div className="app-container">
-        <h1 className="app-title">Tower of Hanoi</h1>
         <Providers>
-          <GameBoard />
+          <h1 className="app-title">Tower of Hanoi</h1>
+          <main>
+            <GameMessages />
+            <GameBoard />
+          </main>
         </Providers>
       </div>
     </React.StrictMode>

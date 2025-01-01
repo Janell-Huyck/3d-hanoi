@@ -1,0 +1,28 @@
+
+.game-messages {
+  min-height: 3rem; /* Reserve enough space for both messages */
+  text-align: center;
+}
+
+.victory-message,
+.error-message {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  margin: 0; /* Avoid unnecessary spacing */
+}
+
+.victory-message[style*="visibility: visible"],
+.error-message[style*="visibility: visible"] {
+  opacity: 1;
+}
+
+.victory-message {
+  color: green;
+  font-size: 1.5rem;
+}
+
+.error-message {
+  color: red;
+  font-size: 1.2rem;
+}
+

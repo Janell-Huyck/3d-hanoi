@@ -7,7 +7,7 @@ const GameBoard = () => {
   return (
     <div className="game-board">
       {Array.from({ length: numberOfTowers }).map((_, index) => (
-        <Tower key={index} towerIndex={index} />
+        <Tower key={index} towerIndex={index} data-testid={`tower-${index}`} />
       ))}
       <Base />
     </div>

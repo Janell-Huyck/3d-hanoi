@@ -1,5 +1,6 @@
 // Export GameContext utilities
-export { default as GameProvider, useGame } from './GameContext';
+export { default as GameProvider } from './GameContext';
+export { useGame } from './GameContext';
 
 // Export DndContext utilities
 export { default as DndProviderContext } from './DndContext';

@@ -1,15 +1,21 @@
 import { useDrag, useDrop } from 'react-dnd';
 import { useGame } from '@contexts';
-import { resetSelection } from '@utils';
+import { resetSelection, clearMessages } from '@utils';
 
 export const useDiskDrag = (size, towerIndex, isTopDisk) => {
-  const { setSelectedDisk, setSelectedTower } = useGame();
+  const {
+    setSelectedDisk,
+    setSelectedTower,
+    setInvalidMoveMessage,
+    setVictoryMessage,
+  } = useGame();
 
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: 'disk',
       item: () => {
-        resetSelection(setSelectedDisk, setSelectedTower); // Reset selection when drag starts
+        clearMessages(setInvalidMoveMessage, setVictoryMessage);
+        resetSelection(setSelectedDisk, setSelectedTower);
         return { size, sourceTowerIndex: towerIndex };
       },
       canDrag: isTopDisk,
