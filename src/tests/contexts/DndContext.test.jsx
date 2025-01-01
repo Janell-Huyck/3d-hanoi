@@ -13,7 +13,7 @@
 
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import DndProviderContext from '@contexts/DndContext';
+import { DndProviderContext } from '@contexts';
 import { DndProvider } from 'react-dnd';
 
 // Mock DndProvider to verify backend prop

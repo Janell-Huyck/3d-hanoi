@@ -16,6 +16,7 @@ export default {
     '^@hooks(.*)$': '<rootDir>/src/hooks$1', // Alias for hooks
     '^@logics(.*)$': '<rootDir>/src/logics$1', // Alias for logic
     '^@app$': '<rootDir>/src/App.jsx', // Alias for the main App component
+    '^@constants(.*)$': '<rootDir>/src/constants$1', // Alias for constants
   },
 
   transformIgnorePatterns: [

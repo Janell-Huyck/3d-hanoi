@@ -21,7 +21,21 @@ jest.mock('@utils', () => ({
 
 describe('useDragAndDrop hooks', () => {
   beforeEach(() => {
+    jest.clearAllMocks(); // Clear mocks before re-mocking
+    const useDragMock = jest.requireMock('react-dnd').useDrag;
+    useDragMock.mockImplementation(() => [{ isDragging: false }, jest.fn()]);
+
+    useGame.mockReturnValue({
+      setSelectedDisk: jest.fn(),
+      setSelectedTower: jest.fn(),
+      setInvalidMoveMessage: jest.fn(),
+      setVictoryMessage: jest.fn(),
+    });
+  });
+
+  afterEach(() => {
     jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   describe('useDiskDrag', () => {
@@ -92,6 +106,20 @@ describe('useDragAndDrop hooks', () => {
 
       useDiskDrag(3, 0, true);
     });
+    it('calls collect to monitor isDragging state', () => {
+      const mockMonitor = { isDragging: jest.fn(() => true) };
+
+      const useDragMock = jest.requireMock('react-dnd').useDrag;
+      useDragMock.mockImplementation((config) => {
+        const { collect } = config();
+        expect(collect(mockMonitor)).toEqual({ isDragging: true }); // Verify collect behavior
+        return [{ isDragging: true }, jest.fn()];
+      });
+
+      const { isDragging } = useDiskDrag(3, 0, true);
+
+      expect(isDragging).toBe(true); // Ensure the state matches
+    });
   });
 
   describe('useTowerDrop', () => {
@@ -125,6 +153,21 @@ describe('useDragAndDrop hooks', () => {
 
       expect(getByTestId('over')).toHaveTextContent('Over');
       expect(mockOnDiskDrop).toHaveBeenCalledWith(0, 1);
+    });
+
+    it('calls collect to monitor isOver state', () => {
+      const mockMonitor = { isOver: jest.fn(() => true) };
+
+      const useDropMock = jest.requireMock('react-dnd').useDrop;
+      useDropMock.mockImplementation((config) => {
+        const { collect } = config();
+        expect(collect(mockMonitor)).toEqual({ isOver: true }); // Verify collect behavior
+        return [{ isOver: true }, jest.fn()];
+      });
+
+      const { isOver } = useTowerDrop(1, jest.fn());
+
+      expect(isOver).toBe(true); // Ensure the state matches
     });
   });
 });

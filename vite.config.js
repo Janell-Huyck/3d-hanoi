@@ -13,6 +13,7 @@ export default defineConfig({
       '@components': path.resolve(__dirname, 'src/components'), // Alias for components
       '@logics': path.resolve(__dirname, 'src/logics'), // Alias for logic
       '@app': path.resolve(__dirname, 'src/App.jsx'), // Alias for the main App component
+      '@constants': path.resolve(__dirname, 'src/constants'), // Alias for constants
     },
   },
 });

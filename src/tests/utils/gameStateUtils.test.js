@@ -2,6 +2,7 @@ import {
   resetSelection,
   isTopDisk,
   clearMessages,
+  incrementMoveCount,
 } from '@utils/gameStateUtils';
 
 describe('gameStateUtils', () => {
@@ -48,6 +49,20 @@ describe('gameStateUtils', () => {
 
       expect(setInvalidMoveMessage).toHaveBeenCalledWith('');
       expect(setVictoryMessage).toHaveBeenCalledWith('');
+    });
+  });
+
+  describe('incrementMoveCount', () => {
+    it('increments the move count by 1', () => {
+      const setMoveCount = jest.fn();
+
+      // Call the function
+      incrementMoveCount(setMoveCount);
+
+      // Simulate the updater function passed to setMoveCount
+      const updater = setMoveCount.mock.calls[0][0];
+      expect(updater(0)).toBe(1); // Starts at 0 and increments by 1
+      expect(updater(5)).toBe(6); // Starts at 5 and increments by 1
     });
   });
 });

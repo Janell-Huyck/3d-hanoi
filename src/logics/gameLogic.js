@@ -31,4 +31,8 @@ export default class GameLogic {
       this.towers[2].length === this.numDisks
     );
   }
+
+  calculateMinimumMoves() {
+    return Math.pow(2, this.numDisks) - 1;
+  }
 }

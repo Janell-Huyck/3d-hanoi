@@ -12,3 +12,7 @@ export const clearMessages = (setInvalidMoveMessage, setVictoryMessage) => {
   setInvalidMoveMessage('');
   setVictoryMessage('');
 };
+
+export const incrementMoveCount = (setMoveCount) => {
+  setMoveCount((prevCount) => prevCount + 1);
+};
