@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { GameLogic } from '@logics'; // Assuming GameLogic is the default export
+import { GameLogic } from '@logics';
 
 // Create the context
 const GameContext = createContext();
@@ -23,7 +23,7 @@ const GameProvider = ({ numDisks, children }) => {
     (fromTower, toTower) => {
       try {
         game.moveDisk(fromTower, toTower);
-        setTowers([...game.towers]); // Update towers state
+        setTowers([...game.towers]);
 
         if (game.isGameWon()) {
           setVictoryMessage('Congratulations! You have won the game!');
