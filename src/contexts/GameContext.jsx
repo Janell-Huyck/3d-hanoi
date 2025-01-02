@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { GameLogic } from '@logics';
+import { useHandleMoveDisk } from '@hooks';
 
 // Create the context
 const GameContext = createContext();
@@ -11,31 +12,39 @@ export const useGame = () => {
 };
 
 // Provider component
-const GameProvider = ({ numDisks, children }) => {
-  const [game] = useState(() => new GameLogic(numDisks));
+const GameProvider = ({ initialNumDisks = 3, children }) => {
+  const [numDisks, setNumDisks] = useState(initialNumDisks);
+  const [game, setGame] = useState(() => new GameLogic(numDisks));
   const [towers, setTowers] = useState([...game.towers]);
   const [selectedDisk, setSelectedDisk] = useState(null);
   const [selectedTower, setSelectedTower] = useState(null);
   const [victoryMessage, setVictoryMessage] = useState('');
   const [invalidMoveMessage, setInvalidMoveMessage] = useState('');
+  const [moveCount, setMoveCount] = useState(0);
 
-  const handleMoveDisk = useCallback(
-    (fromTower, toTower) => {
-      try {
-        game.moveDisk(fromTower, toTower);
-        setTowers([...game.towers]);
+  const handleMoveDisk = useHandleMoveDisk({
+    game,
+    setTowers,
+    setMoveCount,
+    setVictoryMessage,
+    setInvalidMoveMessage,
+  });
 
-        if (game.isGameWon()) {
-          setVictoryMessage('Congratulations! You have won the game!');
-        }
-      } catch (error) {
-        setInvalidMoveMessage(error.message);
-      }
-    },
-    [game], // Dependency on `game`
-  );
+  const resetGame = useCallback((newNumDisks) => {
+    const newGame = new GameLogic(newNumDisks);
+    setNumDisks(newNumDisks);
+    setGame(newGame);
+    setTowers([...newGame.towers]);
+    setMoveCount(0);
+    setVictoryMessage('');
+    setInvalidMoveMessage('');
+    setSelectedDisk(null);
+    setSelectedTower(null);
+  }, []);
 
   const value = {
+    numDisks,
+    setNumDisks,
     towers,
     handleMoveDisk,
     selectedDisk,
@@ -46,16 +55,18 @@ const GameProvider = ({ numDisks, children }) => {
     victoryMessage,
     setInvalidMoveMessage,
     invalidMoveMessage,
+    moveCount,
     isGameWon: game.isGameWon.bind(game),
+    game,
+    resetGame,
   };
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 };
 
-// Define prop types for GameProvider
 GameProvider.propTypes = {
-  numDisks: PropTypes.number.isRequired,
   children: PropTypes.node.isRequired,
+  initialNumDisks: PropTypes.number,
 };
 
 export default GameProvider;

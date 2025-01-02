@@ -86,4 +86,16 @@ describe('GameLogic', () => {
       expect(game.isGameWon()).toBe(true);
     });
   });
+
+  describe('calculateMinimumMoves', () => {
+    test('calculates the correct minimum moves for a given number of disks', () => {
+      expect(game.calculateMinimumMoves()).toBe(7); // 2^3 - 1 = 7
+
+      game = new GameLogic(4); // Initialize a new game with 4 disks
+      expect(game.calculateMinimumMoves()).toBe(15); // 2^4 - 1 = 15
+
+      game = new GameLogic(5); // Initialize a new game with 5 disks
+      expect(game.calculateMinimumMoves()).toBe(31); // 2^5 - 1 = 31
+    });
+  });
 });

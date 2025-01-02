@@ -1,5 +1,10 @@
 import React from 'react';
-import { GameBoard, GameMessages } from '@components';
+import {
+  GameBoard,
+  GameMessages,
+  MoveCounter,
+  RestartButton,
+} from '@components';
 import { Providers } from '@contexts';
 
 function App() {
@@ -10,6 +15,8 @@ function App() {
           <h1 className="app-title">Tower of Hanoi</h1>
           <main>
             <GameMessages />
+            <MoveCounter />
+            <RestartButton />
             <GameBoard />
           </main>
         </Providers>

@@ -32,7 +32,9 @@ export const useDiskDrag = (size, towerIndex, isTopDisk) => {
 export const useTowerDrop = (towerIndex, onDiskDrop) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: 'disk',
-    drop: (item) => onDiskDrop(item.sourceTowerIndex, towerIndex),
+    drop: (item) => {
+      onDiskDrop(item.sourceTowerIndex, towerIndex);
+    },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
