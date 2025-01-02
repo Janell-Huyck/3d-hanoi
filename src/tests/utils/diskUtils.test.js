@@ -18,7 +18,11 @@ describe('getDiskColor', () => {
   });
 
   test('throws an error for sizes less than 1', () => {
-    expect(() => getDiskColor(0)).toThrow('Disk size must be greater than or equal to 1.');
-    expect(() => getDiskColor(-1)).toThrow('Disk size must be greater than or equal to 1.');
+    expect(() => getDiskColor(0)).toThrow(
+      'Disk size must be greater than or equal to 1.',
+    );
+    expect(() => getDiskColor(-1)).toThrow(
+      'Disk size must be greater than or equal to 1.',
+    );
   });
 });

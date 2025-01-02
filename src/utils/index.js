@@ -1,3 +1,8 @@
-export { resetSelection, isTopDisk } from './gameStateUtils';
+export {
+  resetSelection,
+  isTopDisk,
+  clearMessages,
+  incrementMoveCount,
+} from './gameStateUtils';
 
-export { getDiskColor } from './diskUtils'
+export { getDiskColor } from './diskUtils';

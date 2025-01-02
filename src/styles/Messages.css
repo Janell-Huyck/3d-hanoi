@@ -1,0 +1,31 @@
+/* Container for game messages */
+.game-messages {
+  min-height: 3rem; /* Ensures space is reserved for both messages to prevent layout shifting */
+  text-align: center; /* Centers the messages horizontally */
+}
+
+/* Common styles for victory and error messages */
+.victory-message,
+.error-message {
+  opacity: 0; /* Start as invisible */
+  transition: opacity 0.3s ease-in-out; /* Smooth transition for visibility changes */
+  margin: 0; /* Remove default margin for consistent spacing */
+}
+
+/* Make messages visible when their visibility style is set to visible */
+.victory-message[style*="visibility: visible"],
+.error-message[style*="visibility: visible"] {
+  opacity: 1; /* Fully visible */
+}
+
+/* Specific styles for victory message */
+.victory-message {
+  color: green; /* Positive feedback color */
+  font-size: 1.5rem; /* Larger font size for prominence */
+}
+
+/* Specific styles for error message */
+.error-message {
+  color: red; /* Error feedback color */
+  font-size: 1.2rem; /* Slightly smaller font size for secondary prominence */
+}

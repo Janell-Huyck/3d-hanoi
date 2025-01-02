@@ -1,20 +1,5 @@
-/**
- * GameContext.test.jsx
- * 
- * Tests the functionality of the GameContext and its associated provider, GameProvider.
- * 
- * - MockConsumer: A mock React component that consumes the GameContext to simulate
- *   interactions and validate state changes (e.g., towers, selectedDisk, selectedTower).
- * - GameLogic: Mocked to control the behavior of game logic methods like `moveDisk` 
- *   and `isGameWon`, allowing precise simulation of game states.
- * - Includes tests for default values, state updates (e.g., selectedDisk, selectedTower),
- *   and error handling when an invalid move is made.
- * 
- * Mocking, state verification, and edge cases are handled to ensure full coverage.
- */
-
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, act } from '@testing-library/react';
 import { GameProvider, useGame } from '@contexts';
 import { GameLogic } from '@logics';
 
@@ -22,136 +7,137 @@ jest.mock('@logics', () => ({
   GameLogic: jest.fn(),
 }));
 
-const MockConsumer = () => {
-  const {
-    towers,
-    handleMoveDisk,
-    selectedDisk,
-    setSelectedDisk,
-    selectedTower,
-    setSelectedTower,
-    isGameWon,
-  } = useGame();
-
-  return (
-    <div>
-      <div data-testid="towers">{JSON.stringify(towers)}</div>
-      <button data-testid="move-disk" onClick={() => handleMoveDisk(0, 1)}>
-        Move Disk
-      </button>
-      <button data-testid="select-disk" onClick={() => setSelectedDisk(1)}>
-        Select Disk
-      </button>
-      <button data-testid="select-tower" onClick={() => setSelectedTower(2)}>
-        Select Tower
-      </button>
-      <div data-testid="selected-disk">
-        {selectedDisk !== null ? `Disk ${selectedDisk}` : 'None'}
-      </div>
-      <div data-testid="selected-tower">
-        {selectedTower !== null ? `Tower ${selectedTower}` : 'None'}
-      </div>
-      <div data-testid="is-game-won">{isGameWon() ? 'Won' : 'Not Won'}</div>
-    </div>
-  );
-};
+jest.mock('@hooks', () => ({
+  useHandleMoveDisk: jest.fn(() => jest.fn()), // Mock the hook as a no-op function
+}));
 
 describe('GameContext', () => {
-  const mockMoveDisk = jest.fn();
-  const mockIsGameWon = jest.fn();
-
-  const renderWithProvider = (ui = <MockConsumer />) =>
-    render(<GameProvider numDisks={3}>{ui}</GameProvider>);
+  let mockGameInstance;
 
   beforeEach(() => {
-    GameLogic.mockImplementation(() => ({
+    // Mock the GameLogic instance
+    mockGameInstance = {
       towers: [[3, 2, 1], [], []],
-      moveDisk: mockMoveDisk,
-      isGameWon: mockIsGameWon,
-    }));
+      isGameWon: jest.fn(),
+    };
+
+    GameLogic.mockImplementation((numDisks) => {
+      return {
+        towers: [
+          Array.from({ length: numDisks }, (_, i) => numDisks - i),
+          [],
+          [],
+        ],
+        isGameWon: jest.fn(),
+      };
+    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test('provides correct default values', () => {
-    renderWithProvider();
+  const TestComponent = () => {
+    const {
+      numDisks,
+      towers,
+      resetGame,
+      victoryMessage,
+      invalidMoveMessage,
+      moveCount,
+      selectedDisk,
+      selectedTower,
+    } = useGame();
 
-    expect(screen.getByTestId('towers')).toHaveTextContent('[[3,2,1],[],[]]');
-    expect(screen.getByTestId('is-game-won')).toHaveTextContent('Not Won');
-    expect(screen.getByTestId('selected-disk')).toHaveTextContent('None');
-    expect(screen.getByTestId('selected-tower')).toHaveTextContent('None');
+    return (
+      <div>
+        <div data-testid="num-disks">{numDisks}</div>
+        <div data-testid="towers">{JSON.stringify(towers)}</div>
+        <div data-testid="victory-message">{victoryMessage}</div>
+        <div data-testid="invalid-move-message">{invalidMoveMessage}</div>
+        <div data-testid="move-count">{moveCount}</div>
+        <div data-testid="selected-disk">{JSON.stringify(selectedDisk)}</div>
+        <div data-testid="selected-tower">{JSON.stringify(selectedTower)}</div>
+        <button data-testid="reset-button" onClick={() => resetGame(4)}>
+          Reset Game
+        </button>
+      </div>
+    );
+  };
+
+  it('initializes with default values', () => {
+    const { getByTestId } = render(
+      <GameProvider>
+        <TestComponent />
+      </GameProvider>,
+    );
+
+    expect(getByTestId('num-disks').textContent).toBe('3'); // Default disks
+    expect(getByTestId('towers').textContent).toBe(
+      JSON.stringify([[3, 2, 1], [], []]), // Default towers
+    );
+    expect(getByTestId('victory-message').textContent).toBe(''); // Default empty message
+    expect(getByTestId('invalid-move-message').textContent).toBe(''); // Default empty message
+    expect(getByTestId('move-count').textContent).toBe('0'); // Default move count
   });
 
-  test('updates towers and calls moveDisk when handleMoveDisk is invoked', () => {
-    const towers = [[3, 2, 1], [], []];
-    mockMoveDisk.mockImplementation(() => {
-      towers[1].push(towers[0].pop());
+  it('initializes with a custom number of disks', () => {
+    mockGameInstance.towers = [[5, 4, 3, 2, 1], [], []];
+
+    const { getByTestId } = render(
+      <GameProvider initialNumDisks={5}>
+        <TestComponent />
+      </GameProvider>,
+    );
+
+    expect(getByTestId('num-disks').textContent).toBe('5'); // Custom disks
+    expect(getByTestId('towers').textContent).toBe(
+      JSON.stringify([[5, 4, 3, 2, 1], [], []]), // Custom towers
+    );
+  });
+
+  it('resets the game with a new number of disks', async () => {
+    const { getByTestId } = render(
+      <GameProvider>
+        <TestComponent />
+      </GameProvider>,
+    );
+
+    // Trigger reset
+    await act(async () => {
+      getByTestId('reset-button').click();
     });
 
-    GameLogic.mockImplementation(() => ({
-      towers,
-      moveDisk: mockMoveDisk,
-      isGameWon: mockIsGameWon,
-    }));
+    // Ensure GameLogic was initialized with the new disk count
+    expect(GameLogic).toHaveBeenCalledWith(4);
 
-    renderWithProvider();
+    // Wait for state updates and validate the towers
+    expect(getByTestId('num-disks').textContent).toBe('4'); // Updated disks
+    expect(getByTestId('towers').textContent).toBe(
+      JSON.stringify([[4, 3, 2, 1], [], []]), // Updated towers
+    );
 
-    fireEvent.click(screen.getByTestId('move-disk'));
+    // Verify reset state
+    expect(getByTestId('move-count').textContent).toBe('0'); // Reset move count
+    expect(getByTestId('victory-message').textContent).toBe(''); // Reset victory message
+    expect(getByTestId('invalid-move-message').textContent).toBe(''); // Reset invalid move message
 
-    expect(mockMoveDisk).toHaveBeenCalledWith(0, 1);
-    expect(screen.getByTestId('towers')).toHaveTextContent('[[3,2],[1],[]]');
+    expect(getByTestId('selected-disk').textContent).toBe('null'); // Disk reset
+    expect(getByTestId('selected-tower').textContent).toBe('null'); // Tower reset
   });
 
-  test('updates selectedDisk when setSelectedDisk is called', () => {
-    renderWithProvider();
+  it('provides all required values and functions', () => {
+    const { getByTestId } = render(
+      <GameProvider>
+        <TestComponent />
+      </GameProvider>,
+    );
 
-    fireEvent.click(screen.getByTestId('select-disk'));
-
-    expect(screen.getByTestId('selected-disk')).toHaveTextContent('Disk 1');
-  });
-
-  test('updates selectedTower when setSelectedTower is called', () => {
-    renderWithProvider();
-
-    fireEvent.click(screen.getByTestId('select-tower'));
-
-    expect(screen.getByTestId('selected-tower')).toHaveTextContent('Tower 2');
-  });
-
-  test('calls isGameWon and updates the DOM', () => {
-    mockIsGameWon.mockReturnValueOnce(true);
-
-    renderWithProvider();
-
-    expect(screen.getByTestId('is-game-won')).toHaveTextContent('Won');
-  });
-
-  test('calls alert with error message on invalid move', () => {
-    const originalAlert = window.alert;
-    window.alert = jest.fn();
-
-    try {
-      const mockError = new Error('Invalid move!');
-      mockMoveDisk.mockImplementation(() => {
-        throw mockError;
-      });
-
-      renderWithProvider();
-
-      fireEvent.click(screen.getByTestId('move-disk'));
-
-      expect(window.alert).toHaveBeenCalledWith('Invalid move!');
-    } finally {
-      window.alert = originalAlert;
-    }
-  });
-
-  test('handles edge case: calling handleMoveDisk with same source and destination tower', () => {
-    renderWithProvider();
-
-    fireEvent.click(screen.getByTestId('move-disk')); // Invalid move
-    expect(mockMoveDisk).toHaveBeenCalledWith(0, 1);
+    expect(getByTestId('num-disks')).toBeInTheDocument();
+    expect(getByTestId('towers')).toBeInTheDocument();
+    expect(getByTestId('victory-message')).toBeInTheDocument();
+    expect(getByTestId('invalid-move-message')).toBeInTheDocument();
+    expect(getByTestId('move-count')).toBeInTheDocument();
+    expect(getByTestId('reset-button')).toBeInTheDocument();
   });
 });

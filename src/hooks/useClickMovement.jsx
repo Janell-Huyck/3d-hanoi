@@ -1,12 +1,21 @@
 import { useGame } from '@contexts';
-import { resetSelection } from '@utils';
+import { resetSelection, clearMessages } from '@utils';
 
 const useClickMovement = () => {
-  const { selectedDisk, setSelectedDisk, selectedTower, setSelectedTower, handleMoveDisk, towers } = useGame();
+  const {
+    selectedDisk,
+    setSelectedDisk,
+    selectedTower,
+    setSelectedTower,
+    handleMoveDisk,
+    towers,
+    setInvalidMoveMessage,
+    setVictoryMessage,
+  } = useGame();
 
   const handleTowerClick = (towerIndex) => {
     const isEmptyTower = towers[towerIndex].length === 0;
-
+    clearMessages(setInvalidMoveMessage, setVictoryMessage);
     if (selectedDisk === null) {
       if (isEmptyTower) {
         // Clicking on an empty tower without a selected disk should reset the selection

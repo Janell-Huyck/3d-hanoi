@@ -1,8 +1,7 @@
 import React from 'react';
 import { axe } from 'jest-axe';
 import { render } from '@testing-library/react';
-import { GameBoard }  from '@components';
-
+import { GameBoard } from '@components';
 
 jest.mock('@components/Tower', () => ({
   __esModule: true, // Ensures it can be imported as an ES module
@@ -14,6 +13,12 @@ jest.mock('@components/Base', () => ({
   default: jest.fn(() => <div data-testid="base-mock"></div>),
 }));
 
+jest.mock('@contexts', () => ({
+  useGame: jest.fn(() => ({
+    towers: [[], [], []],
+    handleMoveDisk: jest.fn(),
+  })),
+}));
 
 describe('GameBoard Component', () => {
   test('renders without crashing', () => {
@@ -38,7 +43,7 @@ describe('GameBoard Component', () => {
     const gameBoard = container.firstChild;
 
     expect(gameBoard).toHaveClass('game-board');
-    expect(gameBoard.childNodes).toHaveLength(4); // 3 Towers + 1 Base
+    expect(gameBoard.childNodes).toHaveLength(4); // 3 Towers + Base
   });
 
   test('does not introduce accessibility violations', async () => {

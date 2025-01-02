@@ -15,3 +15,11 @@
   margin-bottom: 20px; /* Add spacing between the title and the game board */
   color: #333; /* Title color */
 }
+
+/* Ensure main doesn't interfere with layout */
+main {
+  width: 100%; /* Ensure it takes full width of the container */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-align child components */
+}

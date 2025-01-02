@@ -40,10 +40,9 @@ describe('GameLogic', () => {
         game.moveDisk(0, 2); // Valid move: [1] from tower 0 to 2
         game.moveDisk(0, 2); // Invalid move: [2] cannot go on top of [1]
       }).toThrow('Invalid move!');
-      
+
       expect(game.towers).toEqual([[3, 2], [], [1]]); // Correct expected state
     });
-    
   });
 
   describe('isMoveValid', () => {
@@ -85,6 +84,18 @@ describe('GameLogic', () => {
       game.moveDisk(1, 2); // Move disk 2 to tower 2
       game.moveDisk(0, 2); // Move disk 1 to tower 2
       expect(game.isGameWon()).toBe(true);
+    });
+  });
+
+  describe('calculateMinimumMoves', () => {
+    test('calculates the correct minimum moves for a given number of disks', () => {
+      expect(game.calculateMinimumMoves()).toBe(7); // 2^3 - 1 = 7
+
+      game = new GameLogic(4); // Initialize a new game with 4 disks
+      expect(game.calculateMinimumMoves()).toBe(15); // 2^4 - 1 = 15
+
+      game = new GameLogic(5); // Initialize a new game with 5 disks
+      expect(game.calculateMinimumMoves()).toBe(31); // 2^5 - 1 = 31
     });
   });
 });

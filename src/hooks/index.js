@@ -1,5 +1,4 @@
-// Export everything from useClickMovement
 export { default as useClickMovement } from './useClickMovement';
-
-// Export named hooks from useDragAndDrop
 export { useDiskDrag, useTowerDrop } from './useDragAndDrop';
+export { useRestartGame } from './useRestartGame';
+export { useHandleMoveDisk } from './useHandleMoveDisk';
